@@ -4,7 +4,8 @@
   "description": "A simple student study planner",
   "main": "script.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "echo 'No build step required'" 
   },
   "jest": {
     "testEnvironment": "jsdom"
