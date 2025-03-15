@@ -3,17 +3,17 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Runs the pipeline when changes are pushed to 'main'
+      - main  
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest  
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Prevents history from being wiped
+          fetch-depth: 0  
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -24,14 +24,15 @@ jobs:
         run: npm install
 
       - name: Run Tests
-        run: npx jest --ci --coverage
+        run: npm test  
 
       - name: Build Project
-        run: npm run build  # Ensures the build step runs correctly
+        run: npm run build  
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist  # Ensure this is your correct build output folder
-          keep_files: true  # 🔥 Prevents GitHub Actions from deleting files
+          publish_branch: gh-pages  
+          publish_dir: ./dist  
+          keep_files: true  
