@@ -9,22 +9,27 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Install Dependencies
-      run: npm install
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-    - name: Run Tests
-      run: npm test
+      - name: Install Dependencies
+        run: npm install
 
-    - name: Deploy to GitHub Pages
-      if: success()
-      run: |
-        git config --global user.email "your.email@example.com"
-        git config --global user.name "GitHub Actions"
-        git push origin main
+      - name: Run Tests with Jest
+        run: npx jest --ci --coverage
+
+      - name: Deploy to GitHub Pages (if tests pass)
+        if: success()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist  # Adjust this if your build output directory is different
