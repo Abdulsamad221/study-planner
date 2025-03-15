@@ -1,0 +1,17 @@
+{
+  "name": "student-study-planner",
+  "version": "1.0.0",
+  "description": "A simple student study planner",
+  "main": "script.js",
+  "scripts": {
+    "test": "jest",
+    "build": "echo 'No build step required'" 
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}
