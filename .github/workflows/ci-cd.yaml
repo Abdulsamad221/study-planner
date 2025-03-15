@@ -1,20 +1,19 @@
-name: CI/CD Pipeline
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - main  # Runs the pipeline when changes are pushed to 'main'
 
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Prevents history from being wiped
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -22,20 +21,17 @@ jobs:
           node-version: 18
 
       - name: Install Dependencies
-        run: npm ci  # Ensures clean dependency installation
+        run: npm install
 
-      - name: Ensure Jest is Executable
-        run: |
-          npx jest --version || echo "Jest not found"
-          chmod +x ./node_modules/jest/bin/jest.js || true
-          ls -l ./node_modules/.bin/  # Check Jest permissions
+      - name: Run Tests
+        run: npx jest --ci --coverage
 
-      - name: Run Tests with Jest
-        run: npx jest --ci --coverage || cat ./node_modules/jest/bin/jest.js  # Debug output if Jest fails
+      - name: Build Project
+        run: npm run build  # Ensures the build step runs correctly
 
-      - name: Deploy to GitHub Pages (if tests pass)
-        if: success()
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist  # Adjust if your build output is different
+          publish_dir: ./dist  # Ensure this is your correct build output folder
+          keep_files: true  # 🔥 Prevents GitHub Actions from deleting files
