@@ -22,16 +22,20 @@ jobs:
           node-version: 18
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci  # Ensures a clean installation
+
+      - name: Verify Jest Installation
+        run: npx jest --version  # Check if Jest is installed correctly
+
+      - name: Fix Jest Permissions
+        run: chmod +x node_modules/.bin/jest
 
       - name: Run Tests with Jest
-        run: npx --no-install jest --ci --coverage
+        run: npx jest --ci --coverage
 
       - name: Deploy to GitHub Pages (if tests pass)
         if: success()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-      - name: Fix Jest Permissions
-        run: chmod +x node_modules/.bin/jest
+          publish_dir: ./dist  # Adjust if your build output is different
