@@ -1,29 +1,44 @@
-const { JSDOM } = require("jsdom");
-const { addTask } = require("./script");
+const { addTask, removeTask, getTasks } = require("./script");
 
-let JSDOM, schedule;
+test("addTask function adds a new task", () => {
+    document.body.innerHTML = '<ul id="schedule"></ul>';
+    
+    let result = addTask("Math", "10:00");
+    let schedule = document.getElementById("schedule");
 
-beforeEach(() => {
-    // Create a simulated DOM
-    const dom = new JSDOM(`<!DOCTYPE html><html><body><ul id="schedule"></ul></body></html>`);
-    global.window = dom.window;
-    global.JSDOM = dom.window.JSDOM;
-    schedule = JSDOM.getElementById("schedule");
+    expect(result).toBe("Math at 10:00");
+    expect(schedule.children.length).toBe(1);
 });
 
-test("should add a valid study session", () => {
-    let task = addTask("Math", "10:00");
-
-    expect(task).not.toBe("DOM not available");
-    expect(task).not.toBe("Invalid input");
-    expect(task.textContent).toContain("Math at 10:00");
+test("addTask function should return an error message if subject or time is missing", () => {
+    expect(addTask("", "10:00")).toBe("Error: Subject and time are required.");
+    expect(addTask("Math", "")).toBe("Error: Subject and time are required.");
 });
 
-test("should reject invalid input", () => {
-    let result = addTask("", "10:00");
-    expect(result).toBe("Invalid input");
+test("removeTask function removes a task", () => {
+    document.body.innerHTML = '<ul id="schedule"><li>Math at 10:00</li></ul>';
+    
+    let result = removeTask(0);
+    let schedule = document.getElementById("schedule");
+
+    expect(result).toBe("Task removed");
+    expect(schedule.children.length).toBe(0);
 });
 
-test("should confirm Jest setup is working", () => {
-    expect(1 + 1).toBe(2);
+test("removeTask function should return an error message for invalid index", () => {
+    document.body.innerHTML = '<ul id="schedule"><li>Math at 10:00</li></ul>';
+    
+    expect(removeTask(-1)).toBe("Error: Invalid task index.");
+    expect(removeTask(5)).toBe("Error: Invalid task index.");
+});
+
+test("getTasks function should return an array of tasks", () => {
+    document.body.innerHTML = `
+        <ul id="schedule">
+            <li>Math at 10:00</li>
+            <li>English at 12:00</li>
+        </ul>
+    `;
+    
+    expect(getTasks()).toEqual(["Math at 10:00", "English at 12:00"]);
 });

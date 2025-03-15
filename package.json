@@ -1,18 +1,16 @@
 {
-  "name": "study-planner",
+  "name": "student-study-planner",
   "version": "1.0.0",
-  "description": "A simple frontend-only student study planner web application.",
+  "description": "A simple student study planner",
   "main": "script.js",
   "scripts": {
     "test": "jest"
   },
-  "author": "Your Name",
-  "license": "MIT",
-  "devDependencies": {
-    "jest": "^29.0.0",
-    "jsdom": "^21.1.0"
-  },
   "jest": {
     "testEnvironment": "jsdom"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "jest-environment-jsdom": "^29.0.0"
   }
 }

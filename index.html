@@ -10,15 +10,23 @@
     <header>
         <h1>Student Study Planner</h1>
     </header>
+
     <main>
-        <section id="timetable">
-            <h2>Timetable</h2>
+        <section id="planner">
+            <h2>Study Timetable</h2>
             <input type="text" id="subject" placeholder="Enter Subject">
             <input type="time" id="time">
-            <button onclick="addTask()">Add Study Session</button>
+            <button id="addTaskBtn">Add Study Session</button>
             <ul id="schedule"></ul>
         </section>
+
+        <section id="reminder">
+            <h2>Reminders</h2>
+            <button id="setReminderBtn">Set Reminder</button>
+            <p id="reminderMessage"></p>
+        </section>
     </main>
+
     <script src="script.js"></script>
 </body>
 </html>

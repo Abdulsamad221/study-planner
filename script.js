@@ -1,33 +1,26 @@
 function addTask(subject, time) {
-    if (!subject || !time) return "Invalid input";
-
-    if (typeof jsdom !== "und
-        
-        
-        
-        efined") {
-        let listItem = jsdom.createElement("li");
-        listItem.textContent = `${subject} at ${time}`;
-
-        let removeButton = jsdom.createElement("button");
-        removeButton.textContent = "Remove";
-        removeButton.onclick = function () {
-            listItem.remove();
-        };
-
-        listItem.appendChild(removeButton);
-        let schedule = jsdom.getElementById("schedule");
-        if (schedule) {
-            schedule.appendChild(listItem);
-        }
-
-        return listItem;
+    if (!subject || !time) {
+        return "Error: Subject and time are required.";
     }
-
-    return "DOM not available"; // This will prevent crashes during Jest tests
+    let schedule = document.getElementById("schedule");
+    let taskItem = document.createElement("li");
+    taskItem.textContent = `${subject} at ${time}`;
+    schedule.appendChild(taskItem);
+    return taskItem.textContent;
 }
 
-// Export function for testing
-if (typeof module !== "undefined" && module.exports) {
-    module.exports = { addTask };
+function removeTask(index) {
+    let schedule = document.getElementById("schedule");
+    if (index < 0 || index >= schedule.children.length) {
+        return "Error: Invalid task index.";
+    }
+    schedule.removeChild(schedule.children[index]);
+    return "Task removed";
 }
+
+function getTasks() {
+    let schedule = document.getElementById("schedule");
+    return Array.from(schedule.children).map(task => task.textContent);
+}
+
+module.exports = { addTask, removeTask, getTasks };
